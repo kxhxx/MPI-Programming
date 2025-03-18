@@ -1,2 +1,2 @@
 # MPI-Programming
-Basic codes for parallel computing using MPI in C++ 
+Basic codes in C++ for parallel computing using MPI.
