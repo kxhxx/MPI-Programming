@@ -1,0 +1,43 @@
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 10
+#define ITERATIONS 100
+
+int main(int argc, char** argv) {
+    int rank, size;
+    double grid[N][N], new_grid[N][N];
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    if (rank == 0) {
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < N; j++)
+                grid[i][j] = (i == 0) ? 100.0 : 0.0;
+    }
+
+    MPI_Bcast(grid, N * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    for (int iter = 0; iter < ITERATIONS; iter++) {
+        for (int i = 1; i < N - 1; i++)
+            for (int j = 1; j < N - 1; j++)
+                new_grid[i][j] = 0.25 * (grid[i-1][j] + grid[i+1][j] + grid[i][j-1] + grid[i][j+1]);
+
+        MPI_Allreduce(new_grid, grid, N * N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    }
+
+    if (rank == 0) {
+        printf("Final Heat Distribution:\n");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++)
+                printf("%6.2f ", grid[i][j]);
+            printf("\n");
+        }
+    }
+
+    MPI_Finalize();
+    return 0;
+}
