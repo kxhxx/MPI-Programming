@@ -1,0 +1,41 @@
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 100
+
+int main(int argc, char** argv) {
+    int rank, size;
+    double local_dot = 0, total_dot = 0;
+    double A[N], B[N];
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    int elements_per_proc = N / size;
+    double local_A[elements_per_proc], local_B[elements_per_proc];
+
+    if (rank == 0) {
+        for (int i = 0; i < N; i++) {
+            A[i] = i + 1;
+            B[i] = i + 1;
+        }
+    }
+
+    MPI_Scatter(A, elements_per_proc, MPI_DOUBLE, local_A, elements_per_proc, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Scatter(B, elements_per_proc, MPI_DOUBLE, local_B, elements_per_proc, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    for (int i = 0; i < elements_per_proc; i++) {
+        local_dot += local_A[i] * local_B[i];
+    }
+
+    MPI_Reduce(&local_dot, &total_dot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if (rank == 0) {
+        printf("Dot Product: %lf\n", total_dot);
+    }
+
+    MPI_Finalize();
+    return 0;
+}
