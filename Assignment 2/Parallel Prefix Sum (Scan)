@@ -1,0 +1,47 @@
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 8
+
+int main(int argc, char** argv) {
+    int rank, size;
+    int arr[N], prefix_sum[N];
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    int elements_per_proc = N / size;
+    int local_arr[elements_per_proc], local_prefix[elements_per_proc];
+
+    if (rank == 0) {
+        for (int i = 0; i < N; i++) arr[i] = i + 1;
+    }
+
+    MPI_Scatter(arr, elements_per_proc, MPI_INT, local_arr, elements_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
+
+    local_prefix[0] = local_arr[0];
+    for (int i = 1; i < elements_per_proc; i++) {
+        local_prefix[i] = local_prefix[i - 1] + local_arr[i];
+    }
+
+    int offset = 0;
+    MPI_Scan(&local_prefix[elements_per_proc - 1], &offset, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+    if (rank != 0) {
+        for (int i = 0; i < elements_per_proc; i++) {
+            local_prefix[i] += offset;
+        }
+    }
+
+    MPI_Gather(local_prefix, elements_per_proc, MPI_INT, prefix_sum, elements_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (rank == 0) {
+        printf("Prefix Sum: ");
+        for (int i = 0; i < N; i++) printf("%d ", prefix_sum[i]);
+        printf("\n");
+    }
+
+    MPI_Finalize();
+    return 0;
+}
