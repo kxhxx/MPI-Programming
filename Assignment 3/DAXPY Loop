@@ -1,0 +1,75 @@
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N (1 << 16)  // 2^16 elements
+
+void daxpy_serial(double a, double *X, double *Y) {
+    for (int i = 0; i < N; i++) {
+        X[i] = a * X[i] + Y[i];
+    }
+}
+
+void daxpy_parallel(double a, double *X, double *Y, int rank, int size) {
+    int elements_per_proc = N / size;
+    int start = rank * elements_per_proc;
+    int end = start + elements_per_proc;
+
+    for (int i = start; i < end; i++) {
+        X[i] = a * X[i] + Y[i];
+    }
+
+    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, X, elements_per_proc, MPI_DOUBLE, MPI_COMM_WORLD);
+}
+
+int main(int argc, char **argv) {
+    int rank, size;
+    double a = 2.5, *X, *Y;
+    double start_time, end_time, serial_time, parallel_time;
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    X = (double*)malloc(N * sizeof(double));
+    Y = (double*)malloc(N * sizeof(double));
+
+    // Initialize vectors
+    if (rank == 0) {
+        for (int i = 0; i < N; i++) {
+            X[i] = rand() / (double)RAND_MAX;
+            Y[i] = rand() / (double)RAND_MAX;
+        }
+    }
+
+    // Serial Execution
+    if (rank == 0) {
+        start_time = MPI_Wtime();
+        daxpy_serial(a, X, Y);
+        end_time = MPI_Wtime();
+        serial_time = end_time - start_time;
+    }
+
+    // Broadcast X and Y to all processes
+    MPI_Bcast(X, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(Y, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    // Parallel Execution
+    start_time = MPI_Wtime();
+    daxpy_parallel(a, X, Y, rank, size);
+    end_time = MPI_Wtime();
+    parallel_time = end_time - start_time;
+
+    // Compute Speedup
+    if (rank == 0) {
+        printf("Serial Time: %lf seconds\n", serial_time);
+        printf("Parallel Time: %lf seconds\n", parallel_time);
+        printf("Speedup: %lf\n", serial_time / parallel_time);
+    }
+
+    free(X);
+    free(Y);
+    MPI_Finalize();
+    return 0;
+}
