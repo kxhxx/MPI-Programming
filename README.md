@@ -12,7 +12,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ monte_carlo_pi.cpp -o monte_carlo_pi
+
 mpirun -np <num_processes> ./monte_carlo_pi
 
 
@@ -26,7 +28,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_heat_simulation.cpp -o mpi_heat_simulation
+
 mpirun -np <num_processes> ./mpi_heat_simulation
 
 
@@ -40,7 +44,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_matrix_multiply.cpp -o mpi_matrix_multiply
+
 mpirun -np <num_processes> ./mpi_matrix_multiply
 
 
@@ -54,7 +60,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_dot_product.cpp -o mpi_dot_product
+
 mpirun -np <num_processes> ./mpi_dot_product
 
 
@@ -68,7 +76,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_matrix_transpose.cpp -o mpi_matrix_transpose
+
 mpirun -np <num_processes> ./mpi_matrix_transpose
 
 
@@ -82,7 +92,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_odd_even_sort.cpp -o mpi_odd_even_sort
+
 mpirun -np <num_processes> ./mpi_odd_even_sort
 
  
@@ -96,7 +108,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_prefix_sum.cpp -o mpi_prefix_sum
+
 mpirun -np <num_processes> ./mpi_prefix_sum
 
 
@@ -110,7 +124,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_reduction.cpp -o mpi_reduction
+
 mpirun -np <num_processes> ./mpi_reduction
 
 9. Estimating Pi using MPI Bcast and MPI Reduce
@@ -127,7 +143,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_pi.cpp -o mpi_pi
+
 mpirun -np <num_processes> ./mpi_pi
 
 10. DAXPY Loop
@@ -144,7 +162,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ daxpy_mpi.cpp -o daxpy
+
 mpirun -np <num_processes> ./daxpy
 
 
@@ -160,7 +180,9 @@ MPI library (OpenMPI or MPICH)
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
+
 mpic++ mpi_primes.cpp -o mpi_primes
+
 mpirun -np <num_processes> ./mpi_primes <max_value>
 
 
