@@ -8,7 +8,7 @@ Description:
 This program estimates π using the Monte Carlo method, where points are randomly generated, and the ratio of points inside a unit circle is used to estimate π.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -24,7 +24,7 @@ Description:
 This MPI program simulates heat distribution across a grid using a numerical solver.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -40,7 +40,7 @@ Description:
 This MPI program multiplies two 70×70 matrices in parallel. It also measures execution time and compares it with a sequential implementation.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -56,7 +56,7 @@ Description:
 This program computes the dot product of two large vectors in parallel using MPI.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -72,7 +72,7 @@ Description:
 This MPI program transposes a matrix in parallel using row-wise and column-wise communication.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -88,7 +88,7 @@ Description:
 This program sorts an array using Odd-Even Sort in parallel using MPI.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -104,7 +104,7 @@ Description:
 This MPI program performs a parallel prefix sum (scan) operation.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -120,7 +120,7 @@ Description:
 This MPI program demonstrates parallel reduction, where multiple values are combined into a single result using MPI_Reduce.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -139,7 +139,7 @@ Each process computes its partial sum.
 The partial sums are combined using MPI_Reduce.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -158,7 +158,7 @@ This MPI program performs the DAXPY operation, where each element of the vector 
 It also measures the speedup of MPI execution compared to a sequential implementation.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -176,7 +176,7 @@ The master process assigns numbers to test.
 The slave processes test numbers and report results back.
 
 Requirements:
-MPI library (OpenMPI or MPICH)
+MPI library (OpenMPI or MPICH), 
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
@@ -186,8 +186,11 @@ mpic++ mpi_primes.cpp -o mpi_primes
 mpirun -np <num_processes> ./mpi_primes <max_value>
 
 
-General Notes
+General Notes:
+
 Ensure MPI is installed (mpicc --version).
+
 Use mpirun -np <num_processes> to run the programs.
+
 Modify matrix size, number of iterations, or other parameters in the source code for different test cases.
 
