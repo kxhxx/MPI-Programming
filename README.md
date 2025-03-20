@@ -8,7 +8,7 @@ Description:
 This program estimates π using the Monte Carlo method, where points are randomly generated, and the ratio of points inside a unit circle is used to estimate π.
 
 Requirements:
-MPI library (OpenMPI or MPICH), 
+MPI library (OpenMPI or MPICH),  
 C++ compiler supporting MPI (mpic++)
 
 Compilation & Execution:
