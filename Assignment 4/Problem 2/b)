@@ -1,0 +1,44 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+#define N 1024
+
+__global__ void bitonicSort(int* data) {
+    unsigned int tid = threadIdx.x + blockDim.x * blockIdx.x;
+
+    for (unsigned int size = 2; size <= N; size *= 2) {
+        for (unsigned int stride = size / 2; stride > 0; stride /= 2) {
+            unsigned int pos = 2 * tid - (tid & (stride - 1));
+            if (pos + stride < N) {
+                bool ascending = ((pos & size) == 0);
+                if ((data[pos] > data[pos + stride]) == ascending) {
+                    int temp = data[pos];
+                    data[pos] = data[pos + stride];
+                    data[pos + stride] = temp;
+                }
+            }
+            __syncthreads();
+        }
+    }
+}
+
+int main() {
+    int h_data[N];
+    int* d_data;
+
+    std::srand(std::time(nullptr));
+    for (int i = 0; i < N; ++i) h_data[i] = std::rand() % 10000;
+
+    cudaMalloc(&d_data, N * sizeof(int));
+    cudaMemcpy(d_data, h_data, N * sizeof(int), cudaMemcpyHostToDevice);
+    bitonicSort<<<1, N / 2>>>(d_data);
+    cudaMemcpy(h_data, d_data, N * sizeof(int), cudaMemcpyDeviceToHost);
+
+    std::cout << "Sorted first 10 elements (CUDA): ";
+    for (int i = 0; i < 10; ++i) std::cout << h_data[i] << " ";
+    std::cout << std::endl;
+
+    cudaFree(d_data);
+    return 0;
+}
