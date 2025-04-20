@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cuda_runtime.h>
+
+#define N 1024
+
+__global__ void performDifferentTasks(int* output) {
+    int tid = threadIdx.x;
+
+    if (tid == 0) {
+        
+        int sum = 0;
+        for (int i = 1; i <= N; ++i) {
+            sum += i;
+        }
+        output[0] = sum;
+    } 
+    else if (tid == 1) {
+        
+        int sum = N * (N + 1) / 2;
+        output[1] = sum;
+    }
+}
+
+int main() {
+    int h_output[2] = {0};      // Host output array
+    int* d_output = nullptr;    // Device output pointer
+
+    
+    cudaMalloc(&d_output, 2 * sizeof(int));
+    performDifferentTasks<<<1, 2>>>(d_output);
+    cudaMemcpy(h_output, d_output, 2 * sizeof(int), cudaMemcpyDeviceToHost);
+
+    
+    std::cout << "Iterative Sum (Thread 0): " << h_output[0] << std::endl;
+    std::cout << "Formula Sum   (Thread 1): " << h_output[1] << std::endl;
+    cudaFree(d_output);
+
+    return 0;
+}
