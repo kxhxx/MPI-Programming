@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <thread>
+#include <cstdlib>
+#include <ctime>
+
+void merge(std::vector<int>& arr, int left, int mid, int right) {
+    std::vector<int> leftPart(arr.begin() + left, arr.begin() + mid + 1);
+    std::vector<int> rightPart(arr.begin() + mid + 1, arr.begin() + right + 1);
+
+    int i = 0, j = 0, k = left;
+
+    while (i < leftPart.size() && j < rightPart.size()) {
+        if (leftPart[i] <= rightPart[j]) {
+            arr[k++] = leftPart[i++];
+        } else {
+            arr[k++] = rightPart[j++];
+        }
+    }
+
+    while (i < leftPart.size()) arr[k++] = leftPart[i++];
+    while (j < rightPart.size()) arr[k++] = rightPart[j++];
+}
+
+void parallelMergeSort(std::vector<int>& arr, int left, int right) {
+    if (left >= right) return;
+
+    int mid = (left + right) / 2;
+
+    std::thread t1(parallelMergeSort, std::ref(arr), left, mid);
+    std::thread t2(parallelMergeSort, std::ref(arr), mid + 1, right);
+
+    t1.join();
+    t2.join();
+
+    merge(arr, left, mid, right);
+}
+
+int main() {
+    const int SIZE = 1000;
+    std::vector<int> data(SIZE);
+
+    std::srand(std::time(nullptr));
+    for (int& num : data) num = std::rand() % 10000;
+
+    parallelMergeSort(data, 0, SIZE - 1);
+
+    std::cout << "Sorted first 10 elements (CPU): ";
+    for (int i = 0; i < 10; ++i) std::cout << data[i] << " ";
+    std::cout << std::endl;
+
+    return 0;
+}
