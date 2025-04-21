@@ -265,7 +265,7 @@ Compilation & Execution:
 nvcc -O3 vector_add_static.cu -o vector_add
 
 ./vector_add
-Profiling (Optional)
+Profiling (Optional):
 
 nvprof ./vector_add
 or
